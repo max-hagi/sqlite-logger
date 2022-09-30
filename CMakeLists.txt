@@ -3,4 +3,4 @@ project(Assignment_1)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(Assignment_1 generator.cpp logger.cpp headers.h log_message.cpp logger.h dumper.cpp log_messages.h)
+add_executable(Assignment_1 generator.cpp Logger.cpp headers.h log_message.cpp Logger.h dumper.cpp log_messages.h)

@@ -1,5 +1,5 @@
 #include "headers.h"
-#include "logger.h"
+#include "Logger.h"
 using namespace std;
 
 int main(int argc, char* argv[]) {
@@ -10,10 +10,10 @@ int main(int argc, char* argv[]) {
         messages.push_back(argv[i]);
     }
 
-    logger("messages");
+    Logger generator ("messages");
+    generator.write("test123");
+
 
 
     return 0;
-
-
 }

@@ -1,3 +1,5 @@
+#include <utility>
+
 #include "headers.h"
 using namespace std;
 
@@ -8,8 +10,8 @@ private:
 
 public:
     log_message(string newMessage, string newTimestamp){ //Constructor
-        message = newMessage;
-        timestamp = newTimestamp;
+        message = std::move(newMessage);
+        timestamp = std::move(newTimestamp);
     }
 
     ~log_message()= default; //Destructor
@@ -21,5 +23,4 @@ public:
     string get_timestamp(){ //Setter
         return timestamp;
     }
-
 };
