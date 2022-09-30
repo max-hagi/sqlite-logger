@@ -7,5 +7,7 @@
 #include <string>
 #include "ctime"
 #include "vector"
+#include "headers.h"
+#include "random"
 
 #endif

@@ -63,18 +63,30 @@ void Logger::write(const string& message) {
     }
 }
 
-//vector<string> Logger::read_all() {
-//    vector<string> logs;
-//    string temp = name;
-//    string query = "select * from" + temp +";";
-//
-//    sqlite3_prepare_v2(db, , , , );
-//    sqlite3_step();
-//    sqlite3_column_text();
-//    sqlite3_finalize();
-//
-//    return logs;
-//}
+vector<string> Logger::read_all() {
+    vector<string> logs;
+    string temp = name;
+    string query = "select * from" + temp +";";
+    sqlite3_stmt* statement;
+
+
+    sqlite3_prepare_v2(db, query.c_str(),  query.size(), &statement,nullptr);
+
+    if (sqlite3_step(statement) == SQLITE_ROW) {
+        int iCol = 0;
+        sqlite3_column_text(statement, iCol);
+        sqlite3_column_bytes(statement, iCol);
+        sqlite3_finalize(statement);
+    }
+    else{
+        cout << "Error\n" << endl;
+    }
+
+
+
+
+    return logs;
+}
 
 
 
