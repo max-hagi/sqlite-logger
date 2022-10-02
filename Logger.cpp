@@ -1,5 +1,6 @@
 #include "headers.h"
 #include "Logger.h"
+#include "LogMessage.h"
 using namespace std;
 
 int return_code;
@@ -35,6 +36,9 @@ Logger::Logger(const char* newName){ //Constructor
 }
 
 Logger::~Logger() {
+    string temp = name;
+    string query = "DROP TABLE [IF EXISTS] [" + temp +".]" + temp + ";";
+    return_code = sqlite3_exec(db, query.c_str(), nullptr, nullptr, &error_message);
     sqlite3_close(db);
 }
 
@@ -63,28 +67,25 @@ void Logger::write(const string& message) {
     }
 }
 
-vector<string> Logger::read_all() {
-    vector<string> logs;
+vector<LogMessage> Logger::read_all() {
+    vector<LogMessage> logs;
     string temp = name;
-    string query = "select * from" + temp +";";
+    string query = "Select * from " + temp + ";";
     sqlite3_stmt* statement;
 
+    return_code = sqlite3_prepare_v2(db, query.c_str(), strlen(query.c_str()), &statement,nullptr);
 
-    sqlite3_prepare_v2(db, query.c_str(),  query.size(), &statement,nullptr);
+    while (sqlite3_step(statement) == SQLITE_ROW) { //Until there are no more rows of data
+        string timestamp = (char *) sqlite3_column_text(statement, 0);
+        string text = (char *) sqlite3_column_text(statement, 1);
 
-    if (sqlite3_step(statement) == SQLITE_ROW) {
-        int iCol = 0;
-        sqlite3_column_text(statement, iCol);
-        sqlite3_column_bytes(statement, iCol);
-        sqlite3_finalize(statement);
+        LogMessage log(text, timestamp);
+        logs.push_back(log);
     }
-    else{
-        cout << "Error\n" << endl;
+    return_code = sqlite3_finalize(statement);
+    if(return_code!= SQLITE_OK) {
+        cout << "Error occurred" << endl;
     }
-
-
-
-
     return logs;
 }
 
