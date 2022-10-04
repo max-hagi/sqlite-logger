@@ -13,7 +13,6 @@ Logger::Logger(const char* newName){
 
     //--- Creating Database ---
     return_code = sqlite3_open(name, &db); //Creating the database
-
     if (return_code != SQLITE_OK){ //If database was unable to be created
         fprintf(stderr, "Unable to open database: %s\n", sqlite3_errmsg(db));
         sqlite3_close(db);
@@ -21,14 +20,15 @@ Logger::Logger(const char* newName){
         cout << "Successfully created database \"" << name << "\"" << endl;
     }
 
-    // --- Creating table ---
-    string temp = name;
+    //--- Creating table ---
+    string temp = "messages";
     string query = "CREATE TABLE IF NOT EXISTS "+ temp +" (timestamp VARCHAR(255), message VARCHAR(255));";
-
     return_code = sqlite3_exec(db, query.c_str(), nullptr, nullptr, &error_message);
     if (return_code != SQLITE_OK){
         cerr << "Error creating table: " << return_code << endl;
         sqlite3_free(error_message);
+        sqlite3_close(db);
+        exit(1);
     }
     else{
         cout << "Table created" << endl;

@@ -1,16 +1,16 @@
 #include "headers.h"
 #include "Logger.h"
-
 using namespace std;
-
 
 int main(int argc, char* argv[]) {
     string name;
     vector<char*> messages;
-    vector<LogMessage> logs;
+    //string databaseName = argv[0];
     string databaseName = "messages";
 
     //Creating the database
+
+    //databaseName.erase(0,2)
     Logger generator (databaseName.c_str());
 
     //Adding every argument to a vector
@@ -19,7 +19,7 @@ int main(int argc, char* argv[]) {
     }
 
     //Inserting a random string from the vector to the table
-    for (int i = 0; i < messages.size()+2; ++i) {
+    for (int i = 0; i < messages.size(); ++i) { //FIXME
         int random = rand() % messages.size();
         string value = messages[random];
         generator.write(value);
@@ -28,15 +28,7 @@ int main(int argc, char* argv[]) {
         random = rand() % 10000;
         sqlite3_sleep(random);
     }
-
-    logs = generator.read_all();
-
-    for (LogMessage log: logs) {
-        string temp = log.getTimestamp().erase(log.getTimestamp().length()-1) + ": " + log.getMessage().erase(log.getMessage().length());
-        cout << temp<< endl;
-    }
-
-    generator.~Logger();
-
     return 0;
 }
+
+
