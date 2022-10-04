@@ -1,8 +1,9 @@
 #ifndef ASSIGNMENT_1_LOGGER_H
 #define ASSIGNMENT_1_LOGGER_H
+
 #include <string>
 #include "LogMessage.h"
-using namespace std; //Change scope of namespace definition
+using namespace std;
 
 class Logger {
 private:

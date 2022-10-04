@@ -1,14 +1,15 @@
 #include "headers.h"
 #include "Logger.h"
-#include "LogMessage.h"
+
 using namespace std;
 
 int return_code;
 char* error_message;
 
-Logger::Logger(const char* newName){ //Constructor
-    name = newName;
 
+//Constructor start
+Logger::Logger(const char* newName){
+    name = newName;
 
     //--- Creating Database ---
     return_code = sqlite3_open(name, &db); //Creating the database
@@ -19,7 +20,6 @@ Logger::Logger(const char* newName){ //Constructor
     } else{
         cout << "Successfully created database \"" << name << "\"" << endl;
     }
-
 
     // --- Creating table ---
     string temp = name;
@@ -36,9 +36,6 @@ Logger::Logger(const char* newName){ //Constructor
 }
 
 Logger::~Logger() {
-    string temp = name;
-    string query = "DROP TABLE [IF EXISTS] [" + temp +".]" + temp + ";";
-    return_code = sqlite3_exec(db, query.c_str(), nullptr, nullptr, &error_message);
     sqlite3_close(db);
 }
 
@@ -59,7 +56,7 @@ void Logger::write(const string& message) {
 
     return_code = sqlite3_exec(db, query.c_str(), nullptr, nullptr, &error_message);
     if (return_code != SQLITE_OK){
-        cerr << "Error inserting into table " << return_code << endl;
+        cerr << "Error inserting into table: " << return_code << endl;
         sqlite3_free(error_message);
     }
     else{
@@ -79,7 +76,7 @@ vector<LogMessage> Logger::read_all() {
         string timestamp = (char *) sqlite3_column_text(statement, 0);
         string text = (char *) sqlite3_column_text(statement, 1);
 
-        LogMessage log(text, timestamp);
+        LogMessage log(text,timestamp);
         logs.push_back(log);
     }
     return_code = sqlite3_finalize(statement);
@@ -88,7 +85,6 @@ vector<LogMessage> Logger::read_all() {
     }
     return logs;
 }
-
 
 
 
