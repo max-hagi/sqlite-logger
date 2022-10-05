@@ -2,10 +2,10 @@
 #include "Logger.h"
 using namespace std;
 
+//Signal handler to interrupt generator manually
 int interrupt = 0;
-
 void signalHandler(int signum){
-    cout << "Terminating" << endl;
+    cout << "Terminating manually" << endl;
     interrupt = 1;
 }
 
@@ -14,11 +14,14 @@ int main(int argc, char* argv[]) {
     vector<char*> messages;
 
     //The code below should dynamically name the generator, but runs into error connecting to table whenever I use it:
+    /*
+    string databaseName = argv[0];
+    databaseName = databaseName.erase(0,2);
+    */
 
-    /* string databaseName = argv[0];
-    databaseName = databaseName.erase(0,2); */
-
+    //This is the implementation I had to use to make the logging process function properly:
     string databaseName = "generator";
+
     //Creating the database
     Logger generator (databaseName.c_str());
 
